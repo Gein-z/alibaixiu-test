@@ -65,7 +65,6 @@ $('#usersBox').on('click', '.edit', function () {
   })
 })
 
-
 $('#formBox').on('submit', '#userForm', function () {
   // console.log($(this).serialize());
   var id = $(this).attr('data-id');
@@ -84,24 +83,26 @@ $('#formBox').on('submit', '#userForm', function () {
 })
 
 $('#usersBox').on('click', '.delete', function () {
-  var id = $(this).attr('data-id');
-  console.log(id);
-  $.ajax({
-    type: 'delete',//get或post
-    url: '/users/' + id,//请求的地址
-    // data:{},//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
-    // dataType:'json',
-    success: function (result) {//成功的回调函数
-      // console.log(result)
-      location.reload();
-    }
-  })
+  if (confirm('您确定要执行删除操作吗')) {
+    var id = $(this).attr('data-id');
+    // console.log(id);
+    $.ajax({
+      type: 'delete',//get或post
+      url: '/users/' + id,//请求的地址
+      // data:{},//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
+      // dataType:'json',
+      success: function (result) {//成功的回调函数
+        // console.log(result)
+        location.reload();
+      }
+    })
+  }
 })
 
 $('#selectAll').on('change', function () {
   var bool = $(this).prop('checked');
   $('#usersBox').find('input').prop('checked', bool);
-  if(bool == true){
+  if (bool == true) {
     $('#deleteMany').show();
   } else {
     $('#deleteMany').hide();
@@ -113,28 +114,30 @@ $('#usersBox').on('change', '.status', function () {
   } else {
     $('#selectAll').prop('checked', false);
   }
-  if($('#usersBox').find('input').filter(':checked').length >= 2){
+  if ($('#usersBox').find('input').filter(':checked').length >= 2) {
     $('#deleteMany').show();
   } else {
     $('#deleteMany').hide();
   }
 })
 
-$('#deleteMany').on('click',function(){
-  var selectAll = $('#usersBox').find('input').filter(':checked');
-  var arr = [];
-  selectAll.each(function(index,element) {
-    // console.log($(element).attr('data-id'));
-    arr.push($(element).attr('data-id'));
-  })
-  $.ajax({
-    type:'delete',//get或post
-    url:'/users/' + arr.join('-'),//请求的地址
-    // data:{},//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
-    // dataType:'json',
-    success:function(result){//成功的回调函数
-      // console.log(result)
-      location.reload();
-    }
-  })
+$('#deleteMany').on('click', function () {
+  if (confirm('您真的要执行删除操作吗')) {
+    var selectAll = $('#usersBox').find('input').filter(':checked');
+    var arr = [];
+    selectAll.each(function (index, element) {
+      // console.log($(element).attr('data-id'));
+      arr.push($(element).attr('data-id'));
+    })
+    $.ajax({
+      type: 'delete',//get或post
+      url: '/users/' + arr.join('-'),//请求的地址
+      // data:{},//如果不需要传，则注释掉 请求的参数，a=1&b=2或{a:1,b:2}或者jq中的serialize方法，或者formData收集
+      // dataType:'json',
+      success: function (result) {//成功的回调函数
+        // console.log(result)
+        location.reload();
+      }
+    })
+  }
 })
